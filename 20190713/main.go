@@ -26,7 +26,7 @@ func main() {
 	imgBound := img.Bounds()
 	out := image.NewRGBA(imgBound)
 
-	// Main Process
+	// Reverse Process
 	rect := out.Rect // RGBA -> Rectangle
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
 		for x := rect.Min.X; x < rect.Max.X; x++ {
@@ -40,14 +40,14 @@ func main() {
 		}
 	}
 
-	file_out, err := os.Create("test.jpg")
-	defer file_out.Close()
+	outFile, err := os.Create("guitar_reversed.jpg")
+	defer outFile.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Encode jpeg
-	if err := jpeg.Encode(file_out, out, nil); err != nil {
+	if err := jpeg.Encode(outFile, out, nil); err != nil {
 		log.Fatal(err)
 	}
 }
