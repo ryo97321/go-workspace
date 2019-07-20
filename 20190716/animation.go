@@ -25,7 +25,7 @@ func main() {
 	fmt.Println("start")
 
 	s.Start()
-	time.Sleep(4 * time.Second)
+	time.Sleep(3 * time.Second)
 	s.Stop()
 
 	fmt.Printf("\r%s\r", blanc) // clear
