@@ -13,8 +13,7 @@ import (
 
 func main() {
 	stdin := bufio.NewScanner(os.Stdin)
-
-	fmt.Print("Input plain Text: ")
+	fmt.Print("Plain Text: ")
 	stdin.Scan()
 	input := stdin.Text()
 
@@ -34,15 +33,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// fmt.Printf("encryptText[:aes.BlockSize]: %x\n", encryptText[:aes.BlockSize])
-	// fmt.Printf("iv: %x\n", iv)
-
-	// Encrypt
 	encryptStream := cipher.NewCTR(block, iv)
 	encryptStream.XORKeyStream(encryptText[aes.BlockSize:], plainText)
 	fmt.Printf("Encrypt: %x\n", encryptText)
 
-	// Decrypt
 	decryptText := make([]byte, len(encryptText[aes.BlockSize:]))
 	decryptStream := cipher.NewCTR(block, encryptText[:aes.BlockSize])
 	decryptStream.XORKeyStream(decryptText, encryptText[aes.BlockSize:])
