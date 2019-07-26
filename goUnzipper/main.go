@@ -1,41 +1,53 @@
 package main
 
 import (
+	"archive/zip"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"path/filepath"
+	"strings"
 )
 
-func searchZip(dirName string) []string {
+func searchFiles(dirName string) []string {
 	files, _ := ioutil.ReadDir(dirName)
-
 	var paths []string
 	for _, file := range files {
 		if file.IsDir() {
-			paths = append(paths, searchZip(filepath.Join(dirName, file.Name()))...)
+			paths = append(paths, searchFiles(filepath.Join(dirName, file.Name()))...)
 			continue
 		}
 		paths = append(paths, filepath.Join(dirName, file.Name()))
 	}
-
 	return paths
 }
 
+func searchZips(files []string) []string {
+	var zips []string
+	for _, file := range files {
+		if strings.HasSuffix(file, ".zip") {
+			zips = append(zips, file)
+		}
+	}
+	return zips
+}
+
 func main() {
+	files := searchFiles("./")
+	zipFiles := searchZips(files)
 
-	zipFileNames := searchZip("./")
+	for _, zipFile := range zipFiles {
+		r, err := zip.OpenReader(zipFile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer r.Close()
 
-	for _, name := range zipFileNames {
-		fmt.Println(name)
+		fmt.Printf("*****%s*****\n", zipFile)
+		for _, f := range r.File {
+			fmt.Println(f.Name)
+		}
+		fmt.Println()
 	}
 
-	// files, _ := ioutil.ReadDir("./")
-
-	// for _, file := range files {
-	// 	fmt.Println(file.Name())
-	// if file.IsDir() != true {
-	// 	content, _ := ioutil.ReadFile(file.Name())
-	// 	fmt.Printf("Content : %s\n", string(content))
-	// }
-	// }
 }
