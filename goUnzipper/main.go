@@ -2,9 +2,10 @@ package main
 
 import (
 	"archive/zip"
-	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -43,11 +44,38 @@ func main() {
 		}
 		defer r.Close()
 
-		fmt.Printf("*****%s*****\n", zipFile)
 		for _, f := range r.File {
-			fmt.Println(f.Name)
+			splitFileName := strings.Split(f.Name, "/")
+
+			var mkdirPath string
+
+			// mkdir
+			if len(splitFileName) != 1 {
+				for i := 0; i < len(splitFileName)-1; i++ {
+					mkdirPath += splitFileName[i]
+					if i != len(splitFileName)-2 {
+						mkdirPath += "/"
+					}
+				}
+				os.Mkdir(mkdirPath, f.Mode())
+			}
+
+			rc, err := f.Open()
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer rc.Close()
+
+			buf := make([]byte, f.UncompressedSize)
+			_, err = io.ReadFull(rc, buf)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if err = ioutil.WriteFile(f.Name, buf, f.Mode()); err != nil {
+				log.Fatal(err)
+			}
 		}
-		fmt.Println()
 	}
 
 }
