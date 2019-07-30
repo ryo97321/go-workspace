@@ -12,18 +12,20 @@ func main() {
 	var userInput string
 	var answer string
 	var testWords = []string{"apple", "banana", "orange", "red", "blue", "green", "black", "white", "dog", "cat"}
+	var processTimeSecond float64
 
 	stdin := bufio.NewScanner(os.Stdin)
 	rand.Seed(time.Now().UnixNano())
 
-	fmt.Println("start\n")
+	fmt.Println("start")
+	fmt.Println()
 
 	fmt.Println("********************")
-	startTime := time.Now()
 	for i := 0; i < 10; i++ {
 		answer = testWords[rand.Intn(10)]
 		fmt.Printf("%d : %s\n", (i + 1), answer)
 
+		startTime := time.Now()
 		for {
 			fmt.Print("Input : ")
 			stdin.Scan()
@@ -34,11 +36,16 @@ func main() {
 				break
 			}
 		}
+		endTime := time.Now()
+		processTime := endTime.Sub(startTime)
+		processTimeSecond += processTime.Seconds()
+
+		if i != 9 {
+			time.Sleep(1 * time.Second)
+		}
 	}
-	endTime := time.Now()
-	processTime := endTime.Sub(startTime)
 	fmt.Println("********************")
 
-	fmt.Printf("\nResult : %f秒\n", processTime.Seconds())
+	fmt.Printf("\nResult : %f秒\n", processTimeSecond)
 	fmt.Println("end")
 }
