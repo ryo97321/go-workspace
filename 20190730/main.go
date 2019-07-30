@@ -3,40 +3,32 @@ package main
 import (
 	"context"
 
-	runewidth "github.com/mattn/go-runewidth"
-
 	"github.com/eihigh/goban"
+	runewidth "github.com/mattn/go-runewidth"
+)
+
+var (
+	grid = goban.NewGrid(
+		"    1fr    1fr    1fr ",
+		"1fr header header header",
+		"3fr side   content ",
+		"1fr footer footer footer",
+	)
 )
 
 func main() {
 	runewidth.DefaultCondition = &runewidth.Condition{EastAsianWidth: false}
-	goban.Main(app)
+	goban.Main(app, view)
 }
 
 func app(_ context.Context, es goban.Events) error {
-	v := func() {
-		b := goban.Screen()
-		b.Puts("Press any key to open popup")
-		b.Puts("Ctrl+C to exit")
-	}
-	goban.PushViewFunc(v)
-
-	for {
-		goban.Show()
-		es.ReadKey()
-		popup(es)
-	}
-}
-
-func popup(es goban.Events) {
-	v := func() {
-		b := goban.NewBox(0, 0, 40, 5).Enclose("popup window")
-		b.Prints("Press any key to popup")
-	}
-
-	goban.PushViewFunc(v)
-	defer goban.PopView()
-
 	goban.Show()
 	es.ReadKey()
+	return nil
+}
+
+func view() {
+	b := goban.Screen().Enclose("")
+	header := b.GridItem(grid, "header").DrawSides("", 0, 0, 0, 1)
+	header.Prints("Header")
 }
