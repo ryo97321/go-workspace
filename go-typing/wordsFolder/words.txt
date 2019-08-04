@@ -1,0 +1,11 @@
+apple
+banana
+orange
+grape
+lemon
+bean
+egg
+rice
+soup
+sushi
+ice
