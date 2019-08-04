@@ -44,8 +44,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		fmt.Println(users.ID, users.Name)
 	}
-
 }
