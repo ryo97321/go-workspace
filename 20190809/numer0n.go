@@ -60,7 +60,6 @@ func main() {
 			break
 		}
 	}
-	// fmt.Println(answer)
 
 	for {
 		// ユーザの入力を受け取る
