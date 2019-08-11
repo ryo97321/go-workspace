@@ -32,15 +32,47 @@ func isAnswerNumberDuplicate(answer int) bool {
 }
 
 // ユーザの入力と正解を比較しEAT数とBITE数を返す関数
-func check(input, answer string) (nEat, nBite int) {
+func getEatAndBite(input, answer string) (nEat, nBite int) {
 
+	// 1番目の数字がEat -> eatCheckList[0] = true
+	var eatCheckList []bool
+	for i := 0; i < 4; i++ {
+		eatCheckList = append(eatCheckList, false)
+	}
+
+	// Eat判定
 	for i := 0; i < 4; i++ {
 		checkNumber, _ := strconv.Atoi(string(input[i]))
 		for j := 0; j < 4; j++ {
 			number, _ := strconv.Atoi(string(answer[j]))
 			if checkNumber == number && i == j {
 				nEat++
+				eatCheckList[j] = true
 			}
+		}
+	}
+
+	// Bite判定
+	for i := 0; i < 4; i++ {
+		if eatCheckList[i] == true {
+			continue
+		}
+
+		isNumberExist := false // input内の数字がanswer内にあるかどうか（あればtrue）
+		checkNumber, _ := strconv.Atoi(string(input[i]))
+		for j := 0; j < 4; j++ {
+			if eatCheckList[j] == true {
+				continue
+			}
+			number, _ := strconv.Atoi(string(answer[j]))
+			if checkNumber == number {
+				isNumberExist = true
+				break
+			}
+		}
+
+		if isNumberExist {
+			nBite++
 		}
 	}
 
@@ -69,7 +101,7 @@ func main() {
 		input := stdin.Text()
 
 		// チェックする（関数を使用）
-		nEat, nBite := check(input, strconv.Itoa(answer))
+		nEat, nBite := getEatAndBite(input, strconv.Itoa(answer))
 
 		// 結果を表示する（Eat, Bite）
 		fmt.Printf("%dEAT-%dBITE\n\n", nEat, nBite)
