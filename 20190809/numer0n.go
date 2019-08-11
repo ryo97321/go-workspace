@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"regexp"
 	"strconv"
 	"time"
 )
 
-// 4桁の数字にダブりがないか確認する関数
+// 出題する4桁の数字にダブりがないか確認する関数
 func isAnswerNumberDuplicate(answer int) bool {
 	answerString := strconv.Itoa(answer)
 	var checkList []int
@@ -29,6 +30,16 @@ func isAnswerNumberDuplicate(answer int) bool {
 	}
 
 	return false
+}
+
+// ユーザの入力が有効な値か確認する関数
+func isInputValid(input string) bool {
+	var validInput = regexp.MustCompile(`^[0-9]{4}$`)
+	if validInput.MatchString(input) {
+		return true
+	} else {
+		return false
+	}
 }
 
 // ユーザの入力と正解を比較しEAT数とBITE数を返す関数
@@ -81,9 +92,9 @@ func getEatAndBite(input, answer string) (nEat, nBite int) {
 }
 
 func main() {
-	fmt.Println("Numer0n start.")
-
 	rand.Seed(time.Now().UnixNano())
+
+	fmt.Println("Numer0n start.")
 
 	var answer int
 	for {
@@ -93,14 +104,27 @@ func main() {
 		}
 	}
 
+	stdin := bufio.NewScanner(os.Stdin)
 	for {
-		// ユーザの入力を受け取る
-		stdin := bufio.NewScanner(os.Stdin)
-		fmt.Print("Input Number : ")
-		stdin.Scan()
-		input := stdin.Text()
+		var input string
 
-		// チェックする（関数を使用）
+		for {
+			// ユーザの入力を受け取る
+			fmt.Print("Input Number : ")
+			stdin.Scan()
+			input = stdin.Text()
+
+			// 入力値が正常な値かチェックする
+			if isInputValid(input) {
+				break
+			} else {
+				fmt.Println("Input is not valid")
+				fmt.Println("Input 4-digits number (ex. 1234)")
+				fmt.Println()
+			}
+		}
+
+		// Eat数とBite数を取得する
 		nEat, nBite := getEatAndBite(input, strconv.Itoa(answer))
 
 		// 結果を表示する（Eat, Bite）
