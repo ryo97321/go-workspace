@@ -37,9 +37,8 @@ func isInputValid(input string) bool {
 	var validInput = regexp.MustCompile(`^[0-9]{4}$`)
 	if validInput.MatchString(input) {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 // ユーザの入力と正解を比較しEAT数とBITE数を返す関数
