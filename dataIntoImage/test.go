@@ -9,6 +9,7 @@ func main() {
 	// "01100111" -> 103
 	foo, _ := strconv.ParseInt("01100111", 2, 0)
 	fmt.Println(foo)
+	fmt.Printf("%s\n", string(foo))
 
 	testStr := "01100111"
 	fmt.Println(testStr)
