@@ -2,21 +2,34 @@ package main
 
 import "fmt"
 
-const (
-	// Create a huge number by shifting a 1 bit left 100 places.
-	// In other words, the binary number that is 1 followed by 100 zeros.
-	Big = 1 << 100
-	// Shift it right again 99 places, so we end up with 1<<1, or 2.
-	Small = Big >> 99
-)
+func Sqrt(x float64) float64 {
+	z := 1.0
+	var pre_z float64
+	for i := 0; i < 10; i++ {
+		z -= (z*z - x) / (2 * z)
+		fmt.Printf("%v : %v\n", i, z)
 
-func needInt(x int) int { return x*10 + 1 }
-func needFloat(x float64) float64 {
-	return x * 0.1
+		if i == 0 {
+			pre_z = z
+			continue
+		}
+
+		if pre_z >= z {
+			if pre_z-z < 0.0000000001 {
+				break
+			}
+		} else if pre_z < z {
+			if z-pre_z < 0.0000000001 {
+				break
+			}
+		}
+
+		pre_z = z
+	}
+
+	return z
 }
 
 func main() {
-	fmt.Println(needInt(Small))
-	fmt.Println(needFloat(Small))
-	fmt.Println(needFloat(Big))
+	fmt.Println(Sqrt(2))
 }
