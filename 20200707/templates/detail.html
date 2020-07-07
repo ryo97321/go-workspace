@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8">
+		<title>detail</title>
+	</head>
+	<body>
+		<h2>Edit</h2>
+
+		<p>{{.user.ID}}</p>
+		<p>{{.user.Name}}</p>
+		<p>{{.user.Age}}</p>
+
+		<form method="post" action="/update/{{.todo.ID}}">
+			<p>Content<input type="text" name="text" size="30" value="{{.todo.Text}}" ></p>
+			<p>
+				<select name="status">
+					{{if eq .todo.Status "NotExecuted"}}
+						<option value="NotExecuted" selected>NotExecuted</option>
+						<option value="Executing">Executing</option>
+						<option value="Done">Done</option>
+					{{else if eq .todo.Status "Executing"}}
+						<option value="NotExecuted">NotExecuted</option>
+						<option value="Executing" selected>Executing</option>
+						<option value="Done">Done</option>
+					{{else}}
+						<option value="NotExecuted">NotExecuted</option>
+						<option value="Executing">Executing</option>
+						<option value="Done" selected>Done</option>
+					{{end}}
+				</select>
+			</p>
+			<p><input type="submit" value="Send"></p>
+		</form>
+	</body>
+</html>

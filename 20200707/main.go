@@ -16,7 +16,7 @@ type Todo struct {
 
 // Initialize DB
 func dbInit() {
-	db, err := gorm.open("sqlite3", "test.sqlite3")
+	db, err := gorm.Open("sqlite3", "test.sqlite3")
 	if err != nil {
 		panic("Can't open db (dbInit)")
 	}
@@ -26,7 +26,7 @@ func dbInit() {
 
 // Add DB
 func dbInsert(text string, status string) {
-	db, err := gorm.open("sqlite3", "test.sqlite3")
+	db, err := gorm.Open("sqlite3", "test.sqlite3")
 	if err != nil {
 		panic("Can't open db (dbInsert)")
 	}
@@ -36,13 +36,13 @@ func dbInsert(text string, status string) {
 
 // Update DB
 func dbUpdate(id int, text string, status string) {
-	db, err := gorm.open("sqlite3", "test.sqlite3")
+	db, err := gorm.Open("sqlite3", "test.sqlite3")
 	if err != nil {
 		panic("Can't open db (dbUpdate)")
 	}
 	var todo Todo
 	db.First(&todo, id)
-	todo.text = text
+	todo.Text = text
 	todo.Status = status
 	db.Save(&todo)
 	db.Close()
