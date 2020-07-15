@@ -62,6 +62,12 @@ func main() {
 
 	fmt.Printf("We have %d boxes in our set\n", len(boxes))
 	fmt.Println("The Volume of the first one is", boxes[0].Volume(), "cm3")
-	// fmt.Println("The color of the last one is", boxes[len(boxes)-1].color.String())
-	// fmt.Println("The biggest one is", boxes.BiggestColor().String())
+	fmt.Println("The color of the last one is", boxes[len(boxes)-1].color.String())
+	fmt.Println("The biggest one is", boxes.BiggestColor().String())
+
+	fmt.Println("Let's paint them all black")
+	boxes.PaintItBlack()
+	fmt.Println("The color of the second one is", boxes[1].color.String())
+
+	fmt.Println("Obviously, nown the biggest one is", boxes.BiggestColor().String())
 }
