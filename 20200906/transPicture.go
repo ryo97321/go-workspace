@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"image"
+	"image/jpeg"
 	_ "image/jpeg"
 	"image/png"
 	"log"
@@ -11,7 +12,7 @@ import (
 	"strings"
 )
 
-func changeImageExtension(imageFilePath string) error {
+func changeImageExtension(imageFilePath string, srcFileExt string, dstFileExt string) error {
 	imageFile, err := os.Open(imageFilePath)
 	if err != nil {
 		return err
@@ -23,43 +24,51 @@ func changeImageExtension(imageFilePath string) error {
 		return err
 	}
 
-	imageFilePathExt := filepath.Ext(imageFilePath)                                             // 変換前の画像ファイルの拡張子
-	changedImageFileExt := ".png"                                                               // 変換後の画像ファイルの拡張子
-	changedImageFilePath := strings.Trim(imageFilePath, imageFilePathExt) + changedImageFileExt // 変換後の画像ファイルのパス
+	dstImageFilePath := strings.Trim(imageFilePath, srcFileExt) + dstFileExt // 変換後の画像ファイルのパス
 
-	changedImageFile, err := os.Create(changedImageFilePath)
+	dstImageFile, err := os.Create(dstImageFilePath)
 	if err != nil {
 		return err
 	}
-	defer changedImageFile.Close()
+	defer dstImageFile.Close()
 
-	// pngに変換
-	png.Encode(changedImageFile, img)
+	if dstFileExt == ".jpg" {
+		jpeg.Encode(dstImageFile, img, nil) // jpegに変換
+	} else if dstFileExt == ".png" {
+		png.Encode(dstImageFile, img) // pngに変換
+	}
 
 	return nil
 }
 
 func main() {
-	// 画像形式オプションを取得（デフォルト値: jpg）
-	imageFormatPointer := flag.String("imageFormat", "jpg", "image format")
-
 	// ディレクトリオプションを取得（デフォルト値: images）
-	dirPointer := flag.String("dir", "images", " search root directory")
+	dirPointer := flag.String("dir", "images", "search root directory")
+
+	// 変換前のファイルの拡張子を取得
+	srcFileExtPointer := flag.String("srcFileExt", "jpg", "src image file Extension")
+
+	// 変換後のファイルの拡張子を取得
+	dstFileExtPointer := flag.String("dstFileExt", "png", "dest image file Extension")
 
 	flag.Parse()
 
 	// jpeg -> jpg
-	if *imageFormatPointer == "jpeg" {
-		*imageFormatPointer = "jpg"
+	if *srcFileExtPointer == "jpeg" {
+		*srcFileExtPointer = "jpg"
+	}
+	if *dstFileExtPointer == "jpeg" {
+		*dstFileExtPointer = "jpg"
 	}
 
-	imageExt := "." + *imageFormatPointer // 画像ファイルの拡張子
-	imageFilePaths := make([]string, 0)   // 画像ファイルのパス群
+	srcFileExt := "." + *srcFileExtPointer // 変換前の画像ファイルの拡張子
+	dstFileExt := "." + *dstFileExtPointer // 変換後の画像ファイルの拡張子
+	imageFilePaths := make([]string, 0)    // 画像ファイルのパス群
 
 	// 画像ファイルのパスを取得し, imageFilePathsに格納
 	err := filepath.Walk(*dirPointer,
 		func(path string, info os.FileInfo, err error) error {
-			if filepath.Ext(path) == imageExt {
+			if filepath.Ext(path) == srcFileExt {
 				imageFilePaths = append(imageFilePaths, path)
 			}
 			return nil
@@ -68,9 +77,10 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// 画像の拡張子を変換
 	if len(imageFilePaths) != 0 {
 		for _, imageFilePath := range imageFilePaths {
-			err := changeImageExtension(imageFilePath)
+			err := changeImageExtension(imageFilePath, srcFileExt, dstFileExt)
 			if err != nil {
 				log.Fatal(err)
 			}
