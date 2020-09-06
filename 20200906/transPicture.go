@@ -4,7 +4,6 @@ import (
 	"flag"
 	"image"
 	"image/jpeg"
-	_ "image/jpeg"
 	"image/png"
 	"log"
 	"os"
