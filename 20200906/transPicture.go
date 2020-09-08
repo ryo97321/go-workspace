@@ -2,45 +2,12 @@ package main
 
 import (
 	"flag"
-	"image"
-	"image/jpeg"
-	"image/png"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
+
+	myimage "github.com/ryo97321/image"
 )
-
-func changeImageExtension(imageFilePath string, srcFileExt string, dstFileExt string) error {
-	imageFile, err := os.Open(imageFilePath)
-	if err != nil {
-		return err
-	}
-	defer imageFile.Close()
-
-	img, _, err := image.Decode(imageFile)
-	if err != nil {
-		return err
-	}
-
-	// 変換後の画像ファイルのパスを生成
-	extIndex := strings.LastIndex(imageFilePath, srcFileExt)
-	dstImageFilePath := imageFilePath[:extIndex] + dstFileExt
-
-	dstImageFile, err := os.Create(dstImageFilePath)
-	if err != nil {
-		return err
-	}
-	defer dstImageFile.Close()
-
-	if dstFileExt == ".jpg" {
-		jpeg.Encode(dstImageFile, img, nil) // jpegに変換
-	} else if dstFileExt == ".png" {
-		png.Encode(dstImageFile, img) // pngに変換
-	}
-
-	return nil
-}
 
 func main() {
 	// ディレクトリオプションを取得（デフォルト値: images）
@@ -81,7 +48,7 @@ func main() {
 	// 画像の拡張子を変換
 	if len(imageFilePaths) != 0 {
 		for _, imageFilePath := range imageFilePaths {
-			err := changeImageExtension(imageFilePath, srcFileExt, dstFileExt)
+			err := myimage.ChangeImageExtension(imageFilePath, srcFileExt, dstFileExt)
 			if err != nil {
 				log.Fatal(err)
 			}
