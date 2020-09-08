@@ -23,7 +23,9 @@ func changeImageExtension(imageFilePath string, srcFileExt string, dstFileExt st
 		return err
 	}
 
-	dstImageFilePath := strings.Trim(imageFilePath, srcFileExt) + dstFileExt // 変換後の画像ファイルのパス
+	// 変換後の画像ファイルのパスを生成
+	extIndex := strings.LastIndex(imageFilePath, srcFileExt)
+	dstImageFilePath := imageFilePath[:extIndex] + dstFileExt
 
 	dstImageFile, err := os.Create(dstImageFilePath)
 	if err != nil {
