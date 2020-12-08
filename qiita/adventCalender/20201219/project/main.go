@@ -1,8 +1,8 @@
 package main
 
 import (
+	"html/template"
 	"net/http"
-	"text/template"
 )
 
 func calcAnimalAgeInHumanYears(humanLife, animalLife, animalAge float64) float64 {
@@ -15,9 +15,20 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	tpl.Execute(w, nil)
 }
 
+type params struct {
+	AnimalAge  string
+	AnimalLife string
+}
+
 func calcAnimalAgeInHumanYearsHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	animalAge := r.Form["animalAge"][0]
+	animalLife := r.Form["animalLife"][0]
+
+	params := params{AnimalAge: animalAge, AnimalLife: animalLife}
+
 	tpl := template.Must(template.ParseFiles("calcAnimalAgeInHumanYears.html"))
-	tpl.Execute(w, nil)
+	tpl.Execute(w, params)
 }
 
 func main() {
