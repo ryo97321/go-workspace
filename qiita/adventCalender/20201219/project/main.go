@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -31,15 +32,10 @@ func calcAnimalAgeInHumanYearsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// humanLife := 80.0
-	// animalLife := 16.0
-	// animalAge := 1.0
-
-	// animalAgeInHumanYears := calcAnimalAgeInHumanYears(humanLife, animalLife, animalAge)
-	// fmt.Println(animalAgeInHumanYears)
-
 	http.HandleFunc("/", helloHandler)
 	http.HandleFunc("/calcAnimalAgeInHumanYears", calcAnimalAgeInHumanYearsHandler)
-	port := "8080"
-	http.ListenAndServe(":"+port, nil)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
