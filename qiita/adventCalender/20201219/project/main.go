@@ -3,9 +3,11 @@ package main
 import (
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
-func calcAnimalAgeInHumanYears(humanLife, animalLife, animalAge float64) float64 {
+func calcAnimalAgeInHumanYears(animalLife, animalAge float64) float64 {
+	humanLife := 84.1
 	animalAgeInHumanYears := animalAge * (humanLife / animalLife)
 	return animalAgeInHumanYears
 }
@@ -15,20 +17,17 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	tpl.Execute(w, nil)
 }
 
-type params struct {
-	AnimalAge  string
-	AnimalLife string
-}
-
 func calcAnimalAgeInHumanYearsHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	animalAge := r.Form["animalAge"][0]
-	animalLife := r.Form["animalLife"][0]
+	animalAgeStr := r.Form["animalAge"][0]
+	animalLifeStr := r.Form["animalLife"][0]
 
-	params := params{AnimalAge: animalAge, AnimalLife: animalLife}
+	animalAge, _ := strconv.ParseFloat(animalAgeStr, 64)
+	animalLife, _ := strconv.ParseFloat(animalLifeStr, 64)
+	animalAgeInHumanYears := calcAnimalAgeInHumanYears(animalLife, animalAge)
 
 	tpl := template.Must(template.ParseFiles("calcAnimalAgeInHumanYears.html"))
-	tpl.Execute(w, params)
+	tpl.Execute(w, animalAgeInHumanYears)
 }
 
 func main() {
