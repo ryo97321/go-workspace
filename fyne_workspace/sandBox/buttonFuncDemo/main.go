@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
+	"image/color"
 	"log"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/driver/desktop"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -39,8 +43,13 @@ func main() {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("Button Func Demo")
 
+	text := canvas.NewText("Button Func Demo", color.Black)
+	text.Alignment = fyne.TextAlignCenter
+
 	button := newMyButton("myButton")
 
-	myWindow.SetContent(button)
+	content := container.New(layout.NewVBoxLayout(), text, button)
+
+	myWindow.SetContent(content)
 	myWindow.ShowAndRun()
 }
