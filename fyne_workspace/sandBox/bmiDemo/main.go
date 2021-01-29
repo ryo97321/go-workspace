@@ -18,11 +18,11 @@ func main() {
 
 	heightLabel := canvas.NewText("Height (cm)", color.Black)
 	heightInput := widget.NewEntry()
-	heightContent := container.New(layout.NewHBoxLayout(), heightLabel, heightInput)
 
 	weightLabel := canvas.NewText("Weight (kg)", color.Black)
 	weightInput := widget.NewEntry()
-	weightContent := container.New(layout.NewHBoxLayout(), weightLabel, weightInput)
+
+	enterContent := fyne.NewContainerWithLayout(layout.NewGridLayout(2), heightLabel, heightInput, weightLabel, weightInput)
 
 	bmiLabel := canvas.NewText("BMI : ", color.Black)
 	bmiResultLabel := canvas.NewText("", color.Black)
@@ -42,7 +42,7 @@ func main() {
 		bmiResultLabel.Text = bmiString
 	})
 
-	content := container.New(layout.NewVBoxLayout(), heightContent, weightContent, bmiContent, calcButton)
+	content := container.New(layout.NewVBoxLayout(), enterContent, bmiContent, calcButton)
 
 	myWindow.Resize(fyne.NewSize(300, 100))
 	myWindow.SetContent(content)
