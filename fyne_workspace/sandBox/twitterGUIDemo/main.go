@@ -44,7 +44,7 @@ func main() {
 		panic(err)
 	}
 	for i, tweet := range searchResult.Statuses {
-		fmt.Println(i)
+		fmt.Printf("\n***** %d *****\n", i)
 		fmt.Print(tweet.FullText)
 	}
 }
