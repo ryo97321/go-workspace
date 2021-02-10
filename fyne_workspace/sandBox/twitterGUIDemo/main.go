@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"os"
+	"time"
 
 	"github.com/ChimeraCoder/anaconda"
 )
@@ -38,13 +40,38 @@ func main() {
 	// 	fmt.Printf("%d, TweetName:%v\nTweet:%v\n\n", i, tweet.User.Name, tweet.FullText)
 	// }
 
-	// GetSearch
-	searchResult, err := api.GetSearch("グラブル", nil)
-	if err != nil {
-		panic(err)
-	}
-	for i, tweet := range searchResult.Statuses {
-		fmt.Printf("\n***** %d *****\n", i)
-		fmt.Print(tweet.FullText)
+	// GetSearch Sample (5秒ごとに指定した単語のツイートを取得して表示する)
+	for {
+		v := url.Values{}
+		v.Set("count", "1")
+		searchWord := "グラブル"
+		searchResult, err := api.GetSearch(searchWord, v)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("---")
+		if len(searchResult.Statuses) == 0 {
+			fmt.Println("No Result.")
+		} else {
+			for _, tweet := range searchResult.Statuses {
+				createdAtTime, err := tweet.CreatedAtTime()
+				if err == nil {
+					jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+					createdAtTimeJST := createdAtTime.In(jst)
+					fmt.Print("[CreatedAtTime]:")
+					fmt.Println(createdAtTimeJST)
+				}
+
+				username := tweet.User.Name
+				fmt.Printf("[Username]:%s\n", username)
+
+				fmt.Print(tweet.FullText)
+			}
+			fmt.Println()
+		}
+		fmt.Println("---")
+
+		time.Sleep(time.Second * 5)
 	}
 }
