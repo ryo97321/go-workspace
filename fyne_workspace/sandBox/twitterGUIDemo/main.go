@@ -40,7 +40,7 @@ func main() {
 	// 	fmt.Printf("%d, TweetName:%v\nTweet:%v\n\n", i, tweet.User.Name, tweet.FullText)
 	// }
 
-	// GetSearch Sample (5秒ごとに指定した単語のツイートを取得して表示する)
+	// GetSearch Sample (10秒ごとに指定した単語のツイートを取得して表示する)
 	for {
 		v := url.Values{}
 		v.Set("count", "1")
