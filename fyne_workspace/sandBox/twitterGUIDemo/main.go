@@ -72,6 +72,6 @@ func main() {
 		}
 		fmt.Println("---")
 
-		time.Sleep(time.Second * 5)
+		time.Sleep(time.Second * 10)
 	}
 }
