@@ -68,4 +68,7 @@ func main() {
 	go setTweetPer10Seconds(text, w)
 
 	w.ShowAndRun()
+
+	// Run command
+	// FYNE_FONT=C:\\Windows\\Fonts\\Meiryo.ttc go run main.go
 }
