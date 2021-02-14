@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"strings"
 
@@ -12,31 +11,22 @@ import (
 	"fyne.io/fyne/v2/layout"
 )
 
-func getTweetFullTextLines(fullText string) []string {
-	fullTextLines := strings.Split(fullText, "\n")
-
-	return fullTextLines
-}
-
 func main() {
-	tweetFullText := "My\nname\nis\n***\n"
+	fullText := "This\nis\nsample\ntext\n"
+	fullTextLines := strings.Split(fullText, "\n")
+	nLine := len(fullTextLines)
 
-	tweetFullTextLines := getTweetFullTextLines(tweetFullText)
-	for _, line := range tweetFullTextLines {
-		fmt.Println(line)
+	texts := make([]fyne.CanvasObject, nLine)
+	for _, line := range fullTextLines {
+		text := canvas.NewText(line, color.Black)
+		text.Alignment = fyne.TextAlignCenter
+		texts = append(texts, text)
 	}
 
 	app := app.New()
 	w := app.NewWindow("Title")
 
-	text1 := canvas.NewText("Text1", color.Black)
-	text1.Alignment = fyne.TextAlignCenter
-	text2 := canvas.NewText("Text2", color.Black)
-	text2.Alignment = fyne.TextAlignCenter
-	text3 := canvas.NewText("Text3", color.Black)
-	text3.Alignment = fyne.TextAlignCenter
-
-	content := container.New(layout.NewVBoxLayout(), text1, text2, text3)
+	content := container.New(layout.NewVBoxLayout(), texts...)
 
 	w.SetContent(content)
 	w.Resize(fyne.NewSize(300, 300))
