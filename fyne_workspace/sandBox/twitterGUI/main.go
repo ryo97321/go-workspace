@@ -36,7 +36,7 @@ func getTweet() MyTweetStruct {
 
 	myTweetStruct := MyTweetStruct{"", time.Now(), ""}
 
-	searchWord := "グラブル"
+	searchWord := "Golang"
 	searchResult, err := api.GetSearch(searchWord, v)
 	if err != nil {
 		return myTweetStruct
@@ -63,6 +63,13 @@ func getTweet() MyTweetStruct {
 	return myTweetStruct
 }
 
+func timeToJST(createdAtTime time.Time) time.Time {
+	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
+	createdAtTimeJST := createdAtTime.In(jst)
+
+	return createdAtTimeJST
+}
+
 func setTweetPer10Seconds(w fyne.Window) {
 	for {
 		time.Sleep(time.Second * 10)
@@ -75,7 +82,7 @@ func setTweetPer10Seconds(w fyne.Window) {
 
 		fullTextObject := canvas.NewText(fullText, color.Black)
 		usernameTextObject := canvas.NewText(username, color.Black)
-		createdAtTimeTextObject := canvas.NewText(createdAtTime.String(), color.Black)
+		createdAtTimeTextObject := canvas.NewText(timeToJST(createdAtTime).String(), color.Black)
 
 		content := container.New(layout.NewVBoxLayout(), createdAtTimeTextObject, usernameTextObject, fullTextObject)
 
