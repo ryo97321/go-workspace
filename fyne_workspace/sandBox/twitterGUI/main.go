@@ -93,7 +93,6 @@ func main() {
 	w.SetContent(text)
 	w.Resize(fyne.NewSize(300, 300))
 
-	// go setTweetPer10Seconds(text, w)
 	go setTweetPer10Seconds(w)
 
 	w.ShowAndRun()
