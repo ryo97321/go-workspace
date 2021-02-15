@@ -14,13 +14,15 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 )
 
+// MyTweetStruct 3つのフィールドを持つTweetの構造体
 type MyTweetStruct struct {
-	username     string
-	createAtTime time.Time
-	fullText     string
+	username      string    // ユーザー名
+	createdAtTime time.Time // Tweetの生成時刻
+	fullText      string    // 本文
 }
 
-func getTweet() MyTweetStruct {
+// Tweetを取得する関数
+func getMyTweetStruct() MyTweetStruct {
 
 	var accessToken = os.Getenv("twitterAPIAccessToken")
 	var accessTokenSecret = os.Getenv("twitterAPIAccessTokenSecret")
@@ -36,7 +38,7 @@ func getTweet() MyTweetStruct {
 
 	myTweetStruct := MyTweetStruct{"", time.Now(), ""}
 
-	searchWord := "Golang"
+	searchWord := "日経平均"
 	searchResult, err := api.GetSearch(searchWord, v)
 	if err != nil {
 		return myTweetStruct
@@ -57,12 +59,13 @@ func getTweet() MyTweetStruct {
 	}
 
 	myTweetStruct.username = tweetUserName
-	myTweetStruct.createAtTime = tweetCreatedAtTime
+	myTweetStruct.createdAtTime = tweetCreatedAtTime
 	myTweetStruct.fullText = tweetFullText
 
 	return myTweetStruct
 }
 
+// 時間をJSTに変換する関数
 func timeToJST(createdAtTime time.Time) time.Time {
 	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
 	createdAtTimeJST := createdAtTime.In(jst)
@@ -70,15 +73,16 @@ func timeToJST(createdAtTime time.Time) time.Time {
 	return createdAtTimeJST
 }
 
+// 10秒おきにTweetを表示する関数
 func setTweetPer10Seconds(w fyne.Window) {
 	for {
 		time.Sleep(time.Second * 10)
 
-		myTweetStruct := getTweet()
+		myTweetStruct := getMyTweetStruct()
 
 		fullText := myTweetStruct.fullText
 		username := myTweetStruct.username
-		createdAtTime := myTweetStruct.createAtTime
+		createdAtTime := myTweetStruct.createdAtTime
 
 		fullTextObject := canvas.NewText(fullText, color.Black)
 		usernameTextObject := canvas.NewText(username, color.Black)
