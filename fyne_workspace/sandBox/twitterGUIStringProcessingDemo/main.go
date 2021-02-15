@@ -16,19 +16,19 @@ func main() {
 	fullTextLines := strings.Split(fullText, "\n")
 	nLine := len(fullTextLines)
 
-	texts := make([]fyne.CanvasObject, nLine)
+	app := app.New()
+	w := app.NewWindow("Title")
+	w.Resize(fyne.NewSize(300, 300))
+
+	texts := make([]fyne.CanvasObject, 0, nLine)
 	for _, line := range fullTextLines {
 		text := canvas.NewText(line, color.Black)
 		text.Alignment = fyne.TextAlignCenter
 		texts = append(texts, text)
 	}
 
-	app := app.New()
-	w := app.NewWindow("Title")
-
 	content := container.New(layout.NewVBoxLayout(), texts...)
 
 	w.SetContent(content)
-	w.Resize(fyne.NewSize(300, 300))
 	w.ShowAndRun()
 }
