@@ -35,6 +35,7 @@ func getMyTweetStruct() MyTweetStruct {
 
 	v := url.Values{}
 	v.Set("count", "1")
+	v.Set("result_type", "recent")
 
 	myTweetStruct := MyTweetStruct{"", time.Now(), ""}
 
