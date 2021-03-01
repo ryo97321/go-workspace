@@ -35,8 +35,8 @@ func getMyTweetStruct() MyTweetStruct {
 	api := anaconda.NewTwitterApi(accessToken, accessTokenSecret)
 
 	v := url.Values{}
-	v.Set("count", "1")
-	v.Set("result_type", "recent")
+	v.Set("count", "1")            // 1件のTweetを取得
+	v.Set("result_type", "recent") // 直近のTweetを取得
 
 	myTweetStruct := MyTweetStruct{"", time.Now(), nil}
 
