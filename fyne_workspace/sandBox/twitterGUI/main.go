@@ -4,6 +4,7 @@ import (
 	"image/color"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -18,7 +19,7 @@ import (
 type MyTweetStruct struct {
 	username      string    // ユーザー名
 	createdAtTime time.Time // Tweetの生成時刻
-	fullText      string    // 本文
+	fullTextLines []string  // 本文を改行で区切ったもの
 }
 
 // Tweetを取得する関数
@@ -37,9 +38,9 @@ func getMyTweetStruct() MyTweetStruct {
 	v.Set("count", "1")
 	v.Set("result_type", "recent")
 
-	myTweetStruct := MyTweetStruct{"", time.Now(), ""}
+	myTweetStruct := MyTweetStruct{"", time.Now(), nil}
 
-	searchWord := "日経平均"
+	searchWord := "グラブル"
 	searchResult, err := api.GetSearch(searchWord, v)
 	if err != nil {
 		return myTweetStruct
@@ -61,7 +62,9 @@ func getMyTweetStruct() MyTweetStruct {
 
 	myTweetStruct.username = tweetUserName
 	myTweetStruct.createdAtTime = tweetCreatedAtTime
-	myTweetStruct.fullText = tweetFullText
+
+	fullTextLines := strings.Split(tweetFullText, "\n")
+	myTweetStruct.fullTextLines = fullTextLines
 
 	return myTweetStruct
 }
@@ -81,15 +84,19 @@ func setTweetPer10Seconds(w fyne.Window) {
 
 		myTweetStruct := getMyTweetStruct()
 
-		fullText := myTweetStruct.fullText
+		fullTextLines := myTweetStruct.fullTextLines
 		username := myTweetStruct.username
 		createdAtTime := myTweetStruct.createdAtTime
 
-		fullTextObject := canvas.NewText(fullText, color.Black)
 		usernameTextObject := canvas.NewText(username, color.Black)
 		createdAtTimeTextObject := canvas.NewText(timeToJST(createdAtTime).String(), color.Black)
 
-		content := container.New(layout.NewVBoxLayout(), createdAtTimeTextObject, usernameTextObject, fullTextObject)
+		content := container.New(layout.NewVBoxLayout(), createdAtTimeTextObject, usernameTextObject)
+
+		for _, line := range fullTextLines {
+			fullTextLineObject := canvas.NewText(line, color.Black)
+			content.Add(fullTextLineObject)
+		}
 
 		w.SetContent(content)
 		w.Show()
