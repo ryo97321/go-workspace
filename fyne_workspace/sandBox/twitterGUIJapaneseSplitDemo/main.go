@@ -24,7 +24,7 @@ func splitFullTextEvery30Chars(runes []rune) []string {
 
 func main() {
 	fullText := "月曜日はMondayです。火曜日はTuesdayです。水曜日はWednesdayです。"
-	runes := []rune(fullText) // []string -> []rune
+	runes := []rune(fullText) // string -> []rune
 
 	fullTextLines := splitFullTextEvery30Chars(runes)
 	fmt.Printf("全%d行, %d文字\n", len(fullTextLines), len(runes))
