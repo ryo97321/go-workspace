@@ -1,34 +1,49 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-// fullText を30文字ごとに分割する
-func splitFullTextEvery30Chars(runes []rune) []string {
-	var ss []string
+// fullTextを分割する（改行区切り かつ 1行の最大文字数は30文字）
+func splitFullText(fullText string) []string {
+	fullTextLines := strings.Split(fullText, "\n")
 
-	s := ""
-	for i, r := range runes {
-		s += string(r)
+	var splitedFullText []string
+	for _, fullTextLine := range fullTextLines {
+		var splitedLines []string
+		runes := []rune(fullTextLine)
+		if len(runes) < 30 { // 30文字未満なら、そのままsplitedFullTextに加える
+			splitedLines = append(splitedLines, string(runes))
+		} else {
+			s := ""
+			for i, r := range runes {
+				s += string(r)
 
-		if (i+1)%30 == 0 { // 30文字になったらsをssに加え、sを空にする
-			ss = append(ss, s)
-			s = ""
+				if (i+1)%30 == 0 {
+					splitedLines = append(splitedLines, s)
+					s = ""
+				}
+			}
+			if s != "" { // s に文字列が残っていたらsplitedLinesに加える
+				splitedLines = append(splitedLines, s)
+			}
+		}
+
+		// 30文字ずつに分割した文字列スライスをsplitedFullTextに加える
+		for _, splitedLine := range splitedLines {
+			splitedFullText = append(splitedFullText, splitedLine)
 		}
 	}
-	if s != "" { // s に文字列が残っていたらssに加える
-		ss = append(ss, s)
-	}
 
-	return ss
+	return splitedFullText
 }
 
 func main() {
-	fullText := "月曜日はMondayです。火曜日はTuesdayです。水曜日はWednesdayです。"
-	runes := []rune(fullText) // string -> []rune
+	fullText := "月曜日はMondayです。火曜日はTuesdayです。水曜日はWednesdayです。木曜日はThuradayです。\n金曜日はFridayです。"
 
-	fullTextLines := splitFullTextEvery30Chars(runes)
-	fmt.Printf("全%d行, %d文字\n", len(fullTextLines), len(runes))
+	fullTextLines := splitFullText(fullText)
 	for _, fullTextLine := range fullTextLines {
-		fmt.Printf("%s : %d文字\n", fullTextLine, len([]rune(fullTextLine)))
+		fmt.Printf("%s : %d\n", fullTextLine, len([]rune(fullTextLine)))
 	}
 }
