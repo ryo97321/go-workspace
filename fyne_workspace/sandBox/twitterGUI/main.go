@@ -22,6 +22,41 @@ type MyTweetStruct struct {
 	fullTextLines []string  // 本文を改行で区切ったもの
 }
 
+// fullTextを分割する（改行区切り かつ 1行の最大文字数は40文字）
+func splitFullText(fullText string) []string {
+	fullTextLines := strings.Split(fullText, "\n")
+
+	nMaxString := 40
+	var splitedFullText []string
+	for _, fullTextLine := range fullTextLines {
+		var splitedLines []string
+		runes := []rune(fullTextLine)
+		if len(runes) < nMaxString { // 40文字未満なら、そのままsplitedFullTextに加える
+			splitedLines = append(splitedLines, string(runes))
+		} else {
+			s := ""
+			for i, r := range runes {
+				s += string(r)
+
+				if (i+1)%nMaxString == 0 {
+					splitedLines = append(splitedLines, s)
+					s = ""
+				}
+			}
+			if s != "" { // s に文字列が残っていたらsplitedLinesに加える
+				splitedLines = append(splitedLines, s)
+			}
+		}
+
+		// 30文字ずつに分割した文字列スライスをsplitedFullTextに加える
+		for _, splitedLine := range splitedLines {
+			splitedFullText = append(splitedFullText, splitedLine)
+		}
+	}
+
+	return splitedFullText
+}
+
 // Tweetを取得する関数
 func getMyTweetStruct() MyTweetStruct {
 
@@ -63,7 +98,8 @@ func getMyTweetStruct() MyTweetStruct {
 	myTweetStruct.username = tweetUserName
 	myTweetStruct.createdAtTime = tweetCreatedAtTime
 
-	fullTextLines := strings.Split(tweetFullText, "\n")
+	// fullTextLines := strings.Split(tweetFullText, "\n")
+	fullTextLines := splitFullText(tweetFullText)
 	myTweetStruct.fullTextLines = fullTextLines
 
 	return myTweetStruct
