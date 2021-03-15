@@ -153,17 +153,11 @@ func main() {
 
 	// searchWord が空のときループ
 	for {
-		isEmptySearchWord := true
-
 		fmt.Print("検索ワード：")
 		scanner.Scan()
 		searchWord = scanner.Text()
 
 		if searchWord != "" {
-			isEmptySearchWord = false
-		}
-
-		if isEmptySearchWord == false {
 			break
 		}
 	}
