@@ -19,14 +19,14 @@ import (
 type MyTweetStruct struct {
 	username      string    // ユーザー名
 	createdAtTime time.Time // Tweetの生成時刻
-	fullTextLines []string  // 本文を改行で区切ったもの
+	fullTextLines []string  // 本文を「改行文字」もしくは「30文字」で分割した
 }
 
-// fullTextを分割する（改行区切り かつ 1行の最大文字数は40文字）
+// fullTextを分割する関数（改行区切り かつ 1行の最大文字数は40文字）
 func splitFullText(fullText string) []string {
 	fullTextLines := strings.Split(fullText, "\n")
 
-	nMaxString := 40
+	nMaxString := 40 // 1行の最大文字数
 	var splitedFullText []string
 	for _, fullTextLine := range fullTextLines {
 		var splitedLines []string
@@ -70,8 +70,8 @@ func getMyTweetStruct() MyTweetStruct {
 	api := anaconda.NewTwitterApi(accessToken, accessTokenSecret)
 
 	v := url.Values{}
-	v.Set("count", "1")            // 1件のTweetを取得
-	v.Set("result_type", "recent") // 直近のTweetを取得
+	v.Set("count", "1")            // 1回の検索で1件のTweetを取得するように設定
+	v.Set("result_type", "recent") // 直近のTweetを取得するように設定
 
 	myTweetStruct := MyTweetStruct{"", time.Now(), nil}
 
@@ -98,7 +98,6 @@ func getMyTweetStruct() MyTweetStruct {
 	myTweetStruct.username = tweetUserName
 	myTweetStruct.createdAtTime = tweetCreatedAtTime
 
-	// fullTextLines := strings.Split(tweetFullText, "\n")
 	fullTextLines := splitFullText(tweetFullText)
 	myTweetStruct.fullTextLines = fullTextLines
 
