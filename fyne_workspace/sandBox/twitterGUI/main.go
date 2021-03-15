@@ -180,6 +180,9 @@ func main() {
 		}
 	}
 
+	title := fmt.Sprintf("TwitterAPI [検索ワード：%s]", searchWord)
+	w.SetTitle(title)
+
 	go setTweetPer10Seconds(w, searchWord)
 
 	w.ShowAndRun()
