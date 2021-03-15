@@ -188,5 +188,5 @@ func main() {
 	w.ShowAndRun()
 
 	// Run command
-	// FYNE_FONT=C:\\Windows\\Fonts\\Meiryo.ttc go run main.go
+	// FYNE_THEME=dark FYNE_FONT=C:\\Windows\\Fonts\\Meiryo.ttc go run main.go
 }
