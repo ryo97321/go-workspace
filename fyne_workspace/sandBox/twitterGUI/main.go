@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"image/color"
 	"net/url"
 	"os"
@@ -58,7 +60,7 @@ func splitFullText(fullText string) []string {
 }
 
 // Tweetを取得する関数
-func getMyTweetStruct() MyTweetStruct {
+func getMyTweetStruct(searchWord string) MyTweetStruct {
 
 	var accessToken = os.Getenv("twitterAPIAccessToken")
 	var accessTokenSecret = os.Getenv("twitterAPIAccessTokenSecret")
@@ -75,7 +77,6 @@ func getMyTweetStruct() MyTweetStruct {
 
 	myTweetStruct := MyTweetStruct{"", time.Now(), nil}
 
-	searchWord := "グラブル"
 	searchResult, err := api.GetSearch(searchWord, v)
 	if err != nil {
 		return myTweetStruct
@@ -113,11 +114,11 @@ func timeToJST(createdAtTime time.Time) time.Time {
 }
 
 // 10秒おきにTweetを表示する関数
-func setTweetPer10Seconds(w fyne.Window) {
+func setTweetPer10Seconds(w fyne.Window, searchWord string) {
 	for {
 		time.Sleep(time.Second * 10)
 
-		myTweetStruct := getMyTweetStruct()
+		myTweetStruct := getMyTweetStruct(searchWord)
 
 		fullTextLines := myTweetStruct.fullTextLines
 		username := myTweetStruct.username
@@ -147,7 +148,27 @@ func main() {
 	w.SetContent(text)
 	w.Resize(fyne.NewSize(300, 300))
 
-	go setTweetPer10Seconds(w)
+	scanner := bufio.NewScanner(os.Stdin)
+	var searchWord string
+
+	// searchWord が空のときループ
+	for {
+		isEmptySearchWord := true
+
+		fmt.Print("検索ワード：")
+		scanner.Scan()
+		searchWord = scanner.Text()
+
+		if searchWord != "" {
+			isEmptySearchWord = false
+		}
+
+		if isEmptySearchWord == false {
+			break
+		}
+	}
+
+	go setTweetPer10Seconds(w, searchWord)
 
 	w.ShowAndRun()
 
