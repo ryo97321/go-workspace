@@ -113,6 +113,20 @@ func timeToJST(createdAtTime time.Time) time.Time {
 	return createdAtTimeJST
 }
 
+// 時間を「YYYY/MM/DD HH:mm:ss」の形式に変換する関数
+func formatCreatedAtTime(jstTime time.Time) string {
+	year := jstTime.Year()
+	month := fmt.Sprintf("%d", jstTime.Month())
+	day := jstTime.Day()
+	hour := jstTime.Hour()
+	minute := jstTime.Minute()
+	second := jstTime.Second()
+
+	formatedJstTime := fmt.Sprintf("%d/%02s/%02d %02d:%02d:%02d", year, month, day, hour, minute, second)
+
+	return formatedJstTime
+}
+
 // 10秒おきにTweetを表示する関数
 func setTweetPer10Seconds(w fyne.Window, searchWord string) {
 	for {
@@ -125,7 +139,9 @@ func setTweetPer10Seconds(w fyne.Window, searchWord string) {
 		createdAtTime := myTweetStruct.createdAtTime
 
 		usernameTextObject := canvas.NewText(username, color.Black)
-		createdAtTimeTextObject := canvas.NewText(timeToJST(createdAtTime).String(), color.Black)
+
+		formatedCreatedAtTime := formatCreatedAtTime(timeToJST(createdAtTime))
+		createdAtTimeTextObject := canvas.NewText(formatedCreatedAtTime, color.Black)
 
 		content := container.New(layout.NewVBoxLayout(), createdAtTimeTextObject, usernameTextObject)
 
