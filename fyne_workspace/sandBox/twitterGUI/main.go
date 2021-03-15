@@ -145,10 +145,12 @@ func setTweetPer10Seconds(w fyne.Window, searchWord string) {
 
 		content := container.New(layout.NewVBoxLayout(), createdAtTimeTextObject, usernameTextObject)
 
+		content.Add(canvas.NewText("----------", color.Black))
 		for _, line := range fullTextLines {
 			fullTextLineObject := canvas.NewText(line, color.Black)
 			content.Add(fullTextLineObject)
 		}
+		content.Add(canvas.NewText("----------", color.Black))
 
 		w.SetContent(content)
 		w.Show()
