@@ -19,7 +19,7 @@ import (
 type MyTweetStruct struct {
 	username      string    // ユーザー名
 	createdAtTime time.Time // Tweetの生成時刻
-	fullTextLines []string  // 本文を「改行文字」もしくは「30文字」で分割した
+	fullTextLines []string  // 本文を「改行文字」もしくは「40文字」で分割したもの
 }
 
 // fullTextを分割する関数（改行区切り かつ 1行の最大文字数は40文字）
@@ -48,7 +48,7 @@ func splitFullText(fullText string) []string {
 			}
 		}
 
-		// 30文字ずつに分割した文字列スライスをsplitedFullTextに加える
+		// 40文字ずつに分割した文字列スライスをsplitedFullTextに加える
 		for _, splitedLine := range splitedLines {
 			splitedFullText = append(splitedFullText, splitedLine)
 		}
