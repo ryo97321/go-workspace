@@ -138,19 +138,19 @@ func setTweetPer10Seconds(w fyne.Window, searchWord string) {
 		username := myTweetStruct.username
 		createdAtTime := myTweetStruct.createdAtTime
 
-		usernameTextObject := canvas.NewText(username, color.Black)
+		usernameTextObject := canvas.NewText(username, color.White)
 
 		formatedCreatedAtTime := formatCreatedAtTime(timeToJST(createdAtTime))
-		createdAtTimeTextObject := canvas.NewText(formatedCreatedAtTime, color.Black)
+		createdAtTimeTextObject := canvas.NewText(formatedCreatedAtTime, color.White)
 
 		content := container.New(layout.NewVBoxLayout(), createdAtTimeTextObject, usernameTextObject)
 
-		content.Add(canvas.NewText("----------", color.Black))
+		content.Add(canvas.NewText("----------", color.White))
 		for _, line := range fullTextLines {
-			fullTextLineObject := canvas.NewText(line, color.Black)
+			fullTextLineObject := canvas.NewText(line, color.White)
 			content.Add(fullTextLineObject)
 		}
-		content.Add(canvas.NewText("----------", color.Black))
+		content.Add(canvas.NewText("----------", color.White))
 
 		w.SetContent(content)
 		w.Show()
@@ -161,10 +161,10 @@ func main() {
 	app := app.New()
 	w := app.NewWindow("TwitterGUI")
 
-	text := canvas.NewText("No Result", color.Black)
+	text := canvas.NewText("No Result", color.White)
 	text.Alignment = fyne.TextAlignCenter
 	w.SetContent(text)
-	w.Resize(fyne.NewSize(300, 300))
+	w.Resize(fyne.NewSize(500, 300))
 
 	scanner := bufio.NewScanner(os.Stdin)
 	var searchWord string
