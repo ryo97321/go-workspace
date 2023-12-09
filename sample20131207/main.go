@@ -10,19 +10,16 @@ import (
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 
-	var arr [5]int
-	var n int
+	sum := 0
 	for i := 0; i < 5; i++ {
 		fmt.Print("input number: ")
 		scanner.Scan()
-		n, _ = strconv.Atoi(scanner.Text())
-		arr[i] = n
-	}
+		n, _ := strconv.Atoi(scanner.Text())
 
-	for i := 0; i < 5; i++ {
-		fmt.Println(arr[i])
+		sum += n
 	}
+	fmt.Printf("sum = %d\n", sum)
 
-	/* No20から再開 */
-	/* http://www.cc.kyoto-su.ac.jp/~mmina/bp1/hundredKnocksPrimary.html */
+	/* No30から再開 */
+	/* https://www.cc.kyoto-su.ac.jp/~mmina/bp1/hundredKnocksPrimary.html */
 }
